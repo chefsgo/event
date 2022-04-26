@@ -80,6 +80,20 @@ func (this *Module) publishTo(connect, name string, meta chef.Meta) error {
 	locate := module.hashring.Locate(name)
 
 	if inst, ok := module.instances[locate]; ok {
+
+		// 看看是不是有 notice 定义，如果有，并有args定义，要处理参数包装
+		if meta.Payload != nil {
+			if notice, ok := this.notices[name]; ok {
+				if notice.Args != nil {
+					value := Map{}
+					res := chef.Mapping(notice.Args, meta.Payload, value, notice.Nullable, false)
+					if res.OK() {
+						meta.Payload = value
+					}
+				}
+			}
+		}
+
 		//原数据
 		bytes, err := chef.Marshal(inst.config.Codec, &meta)
 		if err != nil {
