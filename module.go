@@ -44,7 +44,6 @@ type (
 
 		relates map[string]string
 
-		serveFilters    []ctxFunc
 		requestFilters  []ctxFunc
 		executeFilters  []ctxFunc
 		responseFilters []ctxFunc

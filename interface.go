@@ -117,14 +117,10 @@ func (this *Module) Initialize() {
 	}
 
 	//拦截器
-	this.serveFilters = make([]ctxFunc, 0)
 	this.requestFilters = make([]ctxFunc, 0)
 	this.executeFilters = make([]ctxFunc, 0)
 	this.responseFilters = make([]ctxFunc, 0)
 	for _, filter := range this.filters {
-		if filter.Serve != nil {
-			this.serveFilters = append(this.serveFilters, filter.Serve)
-		}
 		if filter.Request != nil {
 			this.requestFilters = append(this.requestFilters, filter.Request)
 		}

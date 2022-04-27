@@ -40,22 +40,14 @@ func (this *Instance) Serve(alias string, data []byte) {
 	}
 
 	//开始执行
-	this.serve(ctx)
+	this.request(ctx)
 	// response 是最后的反馈，是必须执行的
 	this.response(ctx)
-}
-
-func (this *Instance) serve(ctx *Context) {
-	ctx.next(this.module.serveFilters...)
-	ctx.next(this.request)
-	ctx.Next()
 }
 
 // request 请求处理
 func (this *Instance) request(ctx *Context) {
 	ctx.clear()
-
-	//处理是否存在
 
 	//request拦截器
 	ctx.next(this.module.requestFilters...)

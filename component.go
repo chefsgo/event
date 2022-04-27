@@ -45,7 +45,6 @@ type (
 	Filter struct {
 		Name     string  `json:"name"`
 		Text     string  `json:"text"`
-		Serve    ctxFunc `json:"-"`
 		Request  ctxFunc `json:"-"`
 		Execute  ctxFunc `json:"-"`
 		Response ctxFunc `json:"-"`
