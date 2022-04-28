@@ -14,7 +14,7 @@ func (this *Module) Publish(name string, values ...Map) error {
 	if len(values) > 0 {
 		payload = values[0]
 	}
-	meta := chef.Meta{Name: name, Payload: payload}
+	meta := chef.Metadata{Name: name, Payload: payload}
 
 	return this.publish(name, meta)
 }

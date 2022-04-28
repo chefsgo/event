@@ -8,7 +8,7 @@ import (
 type (
 	Context struct {
 		inst *Instance
-		*chef.Context
+		chef.Meta
 
 		index int       //下一个索引
 		nexts []ctxFunc //方法列表

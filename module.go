@@ -75,7 +75,7 @@ type (
 )
 
 // Publish 发起消息
-func (this *Module) publishTo(connect, name string, meta chef.Meta) error {
+func (this *Module) publishTo(connect, name string, meta chef.Metadata) error {
 	locate := module.hashring.Locate(name)
 
 	if inst, ok := module.instances[locate]; ok {
@@ -110,7 +110,7 @@ func (this *Module) relateKey(conn, alias string) string {
 	return fmt.Sprintf("%s-%s")
 }
 
-func (this *Module) publish(name string, meta chef.Meta) error {
+func (this *Module) publish(name string, meta chef.Metadata) error {
 	locate := module.hashring.Locate(name)
 	return this.publishTo(locate, name, meta)
 }
