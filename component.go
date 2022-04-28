@@ -25,6 +25,12 @@ type (
 		// Token bool `json:"token"`
 		// Auth  bool `json:"auth"`
 
+		// 路由单独可定义的处理器
+		Found  ctxFunc `json:"-"`
+		Error  ctxFunc `json:"-"`
+		Failed ctxFunc `json:"-"`
+		Denied ctxFunc `json:"-"`
+
 		Group    string `json:"group"`
 		Connect  string `json:"connect"`
 		Grouping bool   `json:"grouping"`
@@ -61,6 +67,7 @@ type (
 )
 
 func (module *Module) Event(name string, config Event, override bool) {
+	//alias和name是替换关系，比如定义了alias，监听事件的时候，是按alias来的
 	if config.Alias == nil || len(config.Alias) == 0 {
 		config.Alias = []string{name}
 	}

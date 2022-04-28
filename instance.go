@@ -120,7 +120,10 @@ func (this *Instance) response(ctx *Context) {
 func (this *Instance) found(ctx *Context) {
 	ctx.clear()
 
-	//把失败处理器加入调用列表
+	//把处理器加入调用列表
+	if ctx.Config.Found != nil {
+		ctx.next(ctx.Config.Found)
+	}
 	ctx.next(this.module.foundHandlers...)
 
 	ctx.Next()
@@ -129,7 +132,10 @@ func (this *Instance) found(ctx *Context) {
 func (this *Instance) error(ctx *Context) {
 	ctx.clear()
 
-	//把失败处理器加入调用列表
+	//把处理器加入调用列表
+	if ctx.Config.Error != nil {
+		ctx.next(ctx.Config.Error)
+	}
 	ctx.next(this.module.errorHandlers...)
 
 	ctx.Next()
@@ -138,7 +144,10 @@ func (this *Instance) error(ctx *Context) {
 func (this *Instance) failed(ctx *Context) {
 	ctx.clear()
 
-	//把失败处理器加入调用列表
+	//把处理器加入调用列表
+	if ctx.Config.Failed != nil {
+		ctx.next(ctx.Config.Failed)
+	}
 	ctx.next(this.module.failedHandlers...)
 
 	ctx.Next()
@@ -147,7 +156,10 @@ func (this *Instance) failed(ctx *Context) {
 func (this *Instance) denied(ctx *Context) {
 	ctx.clear()
 
-	//把失败处理器加入调用列表
+	//把处理器加入调用列表
+	if ctx.Config.Denied != nil {
+		ctx.next(ctx.Config.Denied)
+	}
 	ctx.next(this.module.deniedHandlers...)
 
 	ctx.Next()
