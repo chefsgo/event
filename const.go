@@ -3,7 +3,7 @@ package event
 import "errors"
 
 const (
-	NAME = "event"
+	NAME = "EVENT"
 )
 
 var (
