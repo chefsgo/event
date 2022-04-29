@@ -35,6 +35,8 @@ func (this *Instance) Serve(alias string, data []byte) {
 	this.request(ctx)
 	// response 是最后的反馈，是必须执行的
 	this.response(ctx)
+
+	chef.CloseMeta(&ctx.Meta)
 }
 
 // request 请求处理
