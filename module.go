@@ -86,7 +86,7 @@ func (this *Module) publishTo(connect, name string, meta chef.Metadata) error {
 				if notice.Args != nil {
 					value := Map{}
 					res := chef.Mapping(notice.Args, meta.Payload, value, notice.Nullable, false)
-					if res.OK() {
+					if res == nil || res.OK() {
 						meta.Payload = value
 					}
 				}
