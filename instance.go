@@ -91,6 +91,9 @@ func (this *Instance) execute(ctx *Context) {
 
 	//execute拦截器
 	ctx.next(this.module.executeFilters...)
+	if ctx.Config.Actions != nil || len(ctx.Config.Actions) > 0 {
+		ctx.next(ctx.Config.Actions...)
+	}
 	if ctx.Config.Action != nil {
 		ctx.next(ctx.Config.Action)
 	}
