@@ -17,7 +17,8 @@ type (
 		Setting  Map      `json:"-"`
 		Coding   bool     `json:"-"`
 
-		Action ctxFunc `json:"-"`
+		Action  ctxFunc   `json:"-"`
+		Actions []ctxFunc `json:"-"`
 
 		// 待优化，事件是不是需要做 token 验证
 		// 但是考虑到统一性，最好是加上
