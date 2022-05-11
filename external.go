@@ -5,6 +5,7 @@ import (
 )
 
 // Publish
+
 func Publish(name string, values ...Map) error {
 	return module.Publish(name, values...)
 }
