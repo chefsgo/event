@@ -59,7 +59,8 @@ type (
 		hashring *util.HashRing
 	}
 
-	Config struct {
+	Configs map[string]Config
+	Config  struct {
 		Driver  string
 		Codec   string
 		Weight  int
@@ -73,6 +74,46 @@ type (
 		connect Connect
 	}
 )
+
+// Driver 注册驱动
+func (module *Module) Driver(name string, driver Driver, override bool) {
+	module.mutex.Lock()
+	defer module.mutex.Unlock()
+
+	if driver == nil {
+		panic("Invalid event driver: " + name)
+	}
+
+	if override {
+		module.drivers[name] = driver
+	} else {
+		if module.drivers[name] == nil {
+			module.drivers[name] = driver
+		}
+	}
+}
+
+func (this *Module) Config(name string, config Config, override bool) {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+
+	if name == "" {
+		name = chef.DEFAULT
+	}
+
+	if override {
+		this.configs[name] = config
+	} else {
+		if _, ok := this.configs[name]; ok == false {
+			this.configs[name] = config
+		}
+	}
+}
+func (this *Module) Configs(config Configs, override bool) {
+	for key, val := range config {
+		this.Config(key, val, override)
+	}
+}
 
 // Publish 发起消息
 func (this *Module) publishTo(connect, name string, meta chef.Metadata) error {
