@@ -32,11 +32,20 @@ func (this *Instance) Serve(alias string, data []byte) {
 	}
 
 	//开始执行
-	this.request(ctx)
-	// response 是最后的反馈，是必须执行的
-	this.response(ctx)
-
+	this.serve(ctx)
 	chef.CloseMeta(&ctx.Meta)
+}
+
+func (this *Instance) serve(ctx *Context) {
+	//清理执行线
+	ctx.clear()
+
+	//request拦截器
+	ctx.next(this.module.requestFilters...)
+	ctx.next(this.request)
+
+	//开始执行
+	ctx.Next()
 }
 
 // request 请求处理
@@ -44,11 +53,43 @@ func (this *Instance) request(ctx *Context) {
 	ctx.clear()
 
 	//request拦截器
-	ctx.next(this.module.requestFilters...)
 	ctx.next(this.finding)     //存在否
 	ctx.next(this.authorizing) //身份验证
 	ctx.next(this.arguing)     //参数处理
 	ctx.next(this.execute)
+
+	//开始执行
+	ctx.Next()
+
+	//response得在这里
+	//这里才能被覆盖在request拦截器中
+	this.response(ctx)
+}
+
+// execute 执行线
+func (this *Instance) execute(ctx *Context) {
+	ctx.clear()
+
+	//execute拦截器
+	ctx.next(this.module.executeFilters...)
+	if ctx.Config.Actions != nil || len(ctx.Config.Actions) > 0 {
+		ctx.next(ctx.Config.Actions...)
+	}
+	if ctx.Config.Action != nil {
+		ctx.next(ctx.Config.Action)
+	}
+
+	//开始执行
+	ctx.Next()
+}
+
+// response 响应线
+func (this *Instance) response(ctx *Context) {
+	ctx.clear()
+
+	//response拦截器
+	ctx.next(this.module.responseFilters...)
+	// ctx.next(this.body)
 
 	//开始执行
 	ctx.Next()
@@ -82,35 +123,6 @@ func (this *Instance) arguing(ctx *Context) {
 			ctx.Args[k] = v
 		}
 	}
-	ctx.Next()
-}
-
-// execute 执行线
-func (this *Instance) execute(ctx *Context) {
-	ctx.clear()
-
-	//execute拦截器
-	ctx.next(this.module.executeFilters...)
-	if ctx.Config.Actions != nil || len(ctx.Config.Actions) > 0 {
-		ctx.next(ctx.Config.Actions...)
-	}
-	if ctx.Config.Action != nil {
-		ctx.next(ctx.Config.Action)
-	}
-
-	//开始执行
-	ctx.Next()
-}
-
-// response 响应线
-func (this *Instance) response(ctx *Context) {
-	ctx.clear()
-
-	//response拦截器
-	ctx.next(this.module.responseFilters...)
-	// ctx.next(this.body)
-
-	//开始执行
 	ctx.Next()
 }
 

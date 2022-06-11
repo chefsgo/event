@@ -13,7 +13,7 @@ func (this *Module) Register(name string, value Any, override bool) {
 	case Config:
 		this.Config(name, config, override)
 	case Configs:
-		this.Configs(name, config, override)
+		this.Configs(config, override)
 	case Event:
 		this.Event(name, config, override)
 	case Notice:
